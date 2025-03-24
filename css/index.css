@@ -24,7 +24,7 @@ a {
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
-    //max-width: 1200px;
+    max-width: 1200px;
 }
 
 .menu-item {
@@ -182,6 +182,10 @@ a {
 @media (max-width: 600px) {
     .menu-item {
         width: 100%;
+    }
+    
+    .container {
+        max-width: 100%;
     }
 }
 /* Tab navigation styling */
