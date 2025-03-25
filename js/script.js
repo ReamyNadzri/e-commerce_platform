@@ -1,6 +1,6 @@
 
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzV37FA6LpNsa5NbAPEuLOLtEuD2BKLoBUodhbNjUiZOqHjzf6fSus6BeTtDOgull6M/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdwec5DTPNXahcNB85wY30rbsAXPgX5oVWwpx9-Z1plzgg45wjBpGxnXWON30pTlSo/exec';
 
 document.getElementById('orderForm').addEventListener('submit', async (e) => {
     e.preventDefault();

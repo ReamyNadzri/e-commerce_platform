@@ -19,7 +19,14 @@
             </div>
         </nav>
     </header>
-
+    <script>
+        window.onload = function() {
+            if (!window.location.search) {
+                window.location.href = 'index.html';
+            }
+        };
+    </script>
+    
 
 </head>
 <body>
@@ -31,8 +38,8 @@
             <i class="bi bi-arrow-left-short" style="font-size: 1rem;"></i> Kembali
         </a>
         
-        <div class="main-container">
-            <div class="row mt-2">
+        <div class="main-container bg-light">
+            <div class="row mt-2 ">
                 <div class="col-md-5 product-image-container">
                     <img id="productImage" class="enlarge-image" alt="Product Image">
                     <div class="thumbnail-container row mt-4">
@@ -140,18 +147,78 @@
                             <p class="section-title">Cara Pembayaran<br><small><i>Jenis pembayaran hanya melalui e-wallet sahaja.</i></small></p>
                             <div class="row mb-3 w3-margin-left">
                                 <div class="col-md-6 form-check">
-                                    <input class="form-check-input" type="radio" name="payment" id="paymentCash" value="cash" onclick="togglePaymentOptions()">
+                                    <input class="form-check-input" type="radio" name="payment" id="paymentCash" value="cash" onclick="togglePaymentOptions()" checked>
                                     <label class="form-check-label" for="paymentCash"> Cash</label>
                                 </div>
                                 <div class="col-md-6 form-check">
-                                    <input class="form-check-input" type="radio" name="payment" id="paymentEWallet" value="e_wallet" onclick="togglePaymentOptions()" checked>
+                                    <input class="form-check-input" type="radio" name="" id="paymentEWallet" value="e_wallet" onclick="togglePaymentOptions()">
                                     <label class="form-check-label" for="paymentEWallet"> E-Wallet</label>
                                 </div>
-                                <div id="eWalletOptions" class="col-12 mt-3">
-                                    <img src="sources/QRCode.jpg" alt="QR Code" style="width:200px;">
-                                    <input type="file" class="form-control mt-2" id="paymentProof" accept="image/*" required>
-                                    <small class="text-muted">Upload the receipt here</small>
 
+                                <div id="eWalletOptions" class="col-12 mt-3">
+                                    
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="eWalletTouchNGo" value="touch_n_go" onclick="showQRCode('sources/qrtng.jpg')">
+                                        <label class="form-check-label" for="eWalletTouchNGo"> Touch n Go E Wallet</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment" id="eWalletDuitNow" value="duit_now" onclick="showQRCode('sources/qrduitnow.jpg')">
+                                        <label class="form-check-label" for="eWalletDuitNow"> Duit Now QR</label>
+                                    </div>
+                                    <div id="qrCodeContainer" class="mt-3" style="display: none;">
+                                        <img id="qrCodeImage" src="" alt="QR Code" style="width:200px; cursor: pointer;" onclick="enlargeImage(this)">
+                                    </div>
+                                    <input type="file" class="form-control mt-2" id="paymentProof" accept="image/*" required>
+                                    <small class="text-muted">Upload the receipt here after making the payment</small>
+
+                                    <script>
+                                        function togglePaymentOptions() {
+                                            const eWalletOptions = document.getElementById('eWalletOptions');
+                                            const paymentProof = document.getElementById('paymentProof');
+                                            if (document.getElementById('paymentEWallet').checked) {
+                                                eWalletOptions.style.display = 'block';
+                                                paymentProof.required = true;
+                                            } else {
+                                                eWalletOptions.style.display = 'none';
+                                                paymentProof.required = false;
+                                            }
+                                        }
+
+                                        function showQRCode(src) {
+                                            const qrCodeContainer = document.getElementById('qrCodeContainer');
+                                            const qrCodeImage = document.getElementById('qrCodeImage');
+                                            qrCodeImage.src = src;
+                                            qrCodeContainer.style.display = 'block';
+                                        }
+
+                                        function enlargeImage(img) {
+                                            const modal = document.createElement('div');
+                                            modal.style.position = 'fixed';
+                                            modal.style.top = '0';
+                                            modal.style.left = '0';
+                                            modal.style.width = '100%';
+                                            modal.style.height = '100%';
+                                            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                                            modal.style.display = 'flex';
+                                            modal.style.justifyContent = 'center';
+                                            modal.style.alignItems = 'center';
+                                            modal.style.cursor = 'pointer';
+                                            modal.onclick = function() {
+                                                document.body.removeChild(modal);
+                                            };
+
+                                            const enlargedImg = document.createElement('img');
+                                            enlargedImg.src = img.src;
+                                            enlargedImg.style.maxWidth = '90%';
+                                            enlargedImg.style.maxHeight = '90%';
+
+                                            modal.appendChild(enlargedImg);
+                                            document.body.appendChild(modal);
+                                        }
+
+                                        // Initialize on page load
+                                        togglePaymentOptions();
+                                    </script>
                                 </div>
                             </div>
 
@@ -163,12 +230,23 @@
                                     <input type="text" id="quantity" value="1" class="form-control text-center" readonly>
                                     <button class="quantity-btn" type="button" onclick="increaseQuantity()">+</button>
                                 </div>
-                                <div class="col-md-6">
-                                    <button class="buy-btn" type="submit" id="buyButton1" disable>Beli - RM5.15</button>
-                                </div>UNAVAILABLE TO BUY! TESTING PHASES
                             </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6 pt-2">
+                                    <button class="buy-btn" type="submit" id="buyButton" disable>Beli - RM5.15</button>
+                                </div>
+                                <div class="col-md-6 pt-2">
+                                    <button class="buy-btn" type="button" style="background-color: lightslategray; cursor: not-allowed;" disabled>Add to Cart</button>
+                                </div>
+                                <script>
+                                    document.querySelector('.cart-btn').addEventListener('mouseover', function() {
+                                        document.getElementById('message').textContent = 'This button is not available';
+                                    });
+                                </script>
+                            </div>     
+                       
                             
-                            <div class="w3-panel w3-pale-red w3-leftbar w3-border-red mt-3" id="message" style="">Error Testing</div>
+                            <div class="w3-panel w3-pale-red w3-leftbar w3-border-red mt-3" id="message" >Error Testing</div>
                         </form>
                     </div>
                 </div>
