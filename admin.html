@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/w3-css/4.1.0/w3.min.css">
     <style>
         * {
@@ -14,13 +16,13 @@
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
         }
-        
+
         body {
             background-color: #f7f7f7;
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .main-container {
             background-color: white;
             border-radius: 15px;
@@ -29,12 +31,12 @@
             transition: transform 0.3s ease;
             margin-bottom: 30px;
         }
-        
+
         .main-container:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
-        
+
         .section-title {
             background-color: white;
             padding: 15px;
@@ -45,11 +47,11 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease;
         }
-        
+
         .section-title:hover {
             transform: translateY(-3px);
         }
-        
+
         .details-section {
             background-color: white;
             padding: 15px;
@@ -57,41 +59,86 @@
             margin-bottom: 15px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
-        
-        th, td {
+
+        th {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 150px;
+        }
+
+        /* Style for action buttons container */
+        .action-buttons {
+            justify-content: center;
+        }
+
+        /* Consistent button sizing */
+        .action-btn {
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            min-width: 80px;
+            /* Ensures consistent width */
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        /* Hover effects for buttons */
+        .btn-processing:hover {
+            background-color: #e68a00;
+        }
+
+        .btn-completed:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-canceled:hover {
+            background-color: #c0392b;
+        }
+
+        /* Table cell adjustments */
+        td {
+            vertical-align: middle;
+            /* Center content vertically */
+        }
+
+        th,
+        td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
         }
-        
+
         th {
             background-color: #f8f9fa;
             font-weight: 600;
             color: #555;
         }
-        
+
         tr:hover {
             background-color: #f9f9f9;
         }
-        
+
         .form-control {
             border-radius: 10px;
             padding: 10px 15px;
             border: 1px solid #ddd;
             transition: all 0.3s ease;
         }
-        
+
         .form-control:focus {
             border-color: #e74c3c;
             box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
         }
-        
+
         .update-btn {
             background-color: #e74c3c;
             color: white;
@@ -102,13 +149,13 @@
             transition: all 0.3s ease;
             font-weight: 500;
         }
-        
+
         .update-btn:hover {
             background-color: #c0392b;
             transform: translateY(-2px);
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .refresh-btn {
             background-color: #3498db;
             color: white;
@@ -120,52 +167,52 @@
             font-weight: 500;
             margin-right: 10px;
         }
-        
+
         .refresh-btn:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .status-badge {
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
         }
-        
+
         .status-new {
             background-color: #3498db;
             color: white;
         }
-        
+
         .status-processing {
             background-color: #f39c12;
             color: white;
         }
-        
+
         .status-completed {
             background-color: #2ecc71;
             color: white;
         }
-        
+
         .status-canceled {
             background-color: #e74c3c;
             color: white;
         }
-        
+
         .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .alert {
             display: none;
             margin-top: 15px;
         }
-        
+
         .app-header {
             display: flex;
             align-items: center;
@@ -175,27 +222,26 @@
             border-radius: 15px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
-        
+
         .logo {
             font-size: 2.5rem;
             color: #e74c3c;
             margin-right: 15px;
         }
-        
+
         .app-title {
             font-size: 1.5rem;
             font-weight: bold;
             color: #333;
             margin: 0;
         }
-        
-        /* Tab styling */
+
         .tab-container {
             overflow: hidden;
             border-bottom: 1px solid #eee;
             margin-bottom: 20px;
         }
-        
+
         .tab-button {
             background-color: #f8f9fa;
             border: none;
@@ -209,22 +255,22 @@
             margin-right: 5px;
             color: #555;
         }
-        
+
         .tab-button:hover {
             background-color: #e9ecef;
         }
-        
+
         .tab-button.active {
             background-color: #e74c3c;
             color: white;
         }
-        
+
         .tab-content {
             display: none;
             padding: 20px 0;
             border-top: none;
         }
-        
+
         .badge-container {
             display: inline-flex;
             align-items: center;
@@ -237,10 +283,123 @@
             font-size: 12px;
             margin-left: 8px;
         }
+
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .pagination-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .pagination-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .proof-link {
+            color: #3498db;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .proof-link:hover {
+            text-decoration: underline;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .proof-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+
+        .btn-processing {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-completed {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .btn-canceled {
+            background-color: #e74c3c;
+            color: white;
+        }
     </style>
 </head>
+
 <body>
-    <div class="container mt-2" style="max-width: 1000px;">
+    <div class="container mt-2">
         <div class="app-header">
             <div class="logo">
                 <i class="bi bi-bootstrap-fill"></i>
@@ -250,12 +409,12 @@
                 <p class="text-muted mb-0">Manage orders and inventory</p>
             </div>
         </div>
-        
+
         <div class="main-container">
             <div class="section-title">
                 <h2><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
             </div>
-            
+
             <div class="details-section">
                 <div class="tab-container">
                     <button class="tab-button active" onclick="openTab(event, 'ordersTab')">
@@ -265,7 +424,7 @@
                         <i class="bi bi-box-seam"></i> Inventory
                     </button>
                 </div>
-                
+
                 <!-- Orders Tab Content -->
                 <div id="ordersTab" class="tab-content" style="display: block;">
                     <div class="header-container">
@@ -274,28 +433,45 @@
                             <i class="bi bi-arrow-clockwise"></i> Refresh
                         </button>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table id="ordersTable" class="table">
                             <thead>
                                 <tr>
                                     <th>Timestamp</th>
-                                    <th>Customer</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Phone</th>
                                     <th>Item</th>
-                                    <th>Qty</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
+                                    <th>Quantity</th>
+                                    <th>Total (RM)</th>
+                                    <th>Cooked</th>
+                                    <th>Delivery Type</th>
+                                    <th>Payment Type</th>
+                                    <th>Room Number</th>
+                                    <th>Payment Proof</th>
+                                    <th class="text-center">Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="ordersBody"></tbody>
                         </table>
                     </div>
-                    
+
+                    <div class="pagination-container" id="ordersPagination">
+                        <div class="page-info" id="ordersPageInfo">Showing 0 to 0 of 0 entries</div>
+                        <div class="pagination-buttons">
+                            <button class="pagination-btn" onclick="changePage('orders', -1)" id="ordersPrevBtn"><i
+                                    class="bi bi-arrow-left-short"></i></button>
+                            <button class="pagination-btn" onclick="changePage('orders', 1)" id="ordersNextBtn"><i
+                                    class="bi bi-arrow-right-short"></i></button>
+                        </div>
+                    </div>
+
                     <div class="w3-panel w3-pale-green w3-leftbar w3-border-green alert" id="orderAlert">
                         <p>Orders refreshed successfully!</p>
                     </div>
                 </div>
-                
+
                 <!-- Inventory Tab Content -->
                 <div id="inventoryTab" class="tab-content">
                     <div class="header-container">
@@ -304,7 +480,7 @@
                             <i class="bi bi-arrow-clockwise"></i> Refresh
                         </button>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table id="inventoryTable" class="table">
                             <thead>
@@ -318,7 +494,17 @@
                             <tbody id="inventoryBody"></tbody>
                         </table>
                     </div>
-                    
+
+                    <div class="pagination-container" id="inventoryPagination">
+                        <div class="page-info" id="inventoryPageInfo">Showing 0 to 0 of 0 entries</div>
+                        <div class="pagination-buttons">
+                            <button class="pagination-btn" onclick="changePage('inventory', -1)"
+                                id="inventoryPrevBtn"><i class="bi bi-arrow-left-short"></i></button>
+                            <button class="pagination-btn" onclick="changePage('inventory', 1)" id="inventoryNextBtn"><i
+                                    class="bi bi-arrow-right-short"></i></button>
+                        </div>
+                    </div>
+
                     <div class="w3-panel w3-pale-green w3-leftbar w3-border-green alert" id="inventoryAlert">
                         <p>Inventory updated successfully!</p>
                     </div>
@@ -327,10 +513,29 @@
         </div>
     </div>
 
+    <!-- Payment Proof Modal -->
+    <div id="proofModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Payment Proof</h3>
+            <div id="proofContent">
+                <img id="proofImage" class="proof-image" src="" alt="Payment Proof">
+                <div id="proofText"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzV37FA6LpNsa5NbAPEuLOLtEuD2BKLoBUodhbNjUiZOqHjzf6fSus6BeTtDOgull6M/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJmbbBneotJqvt8gcuSmW91Ry2VhvxY4DU9OnwDWl1r03Lw_SxgJOyGnA_OE4XcfE/exec';
         const PASSWORD = '110119';
-        
+        const ITEMS_PER_PAGE = 10; // Number of items to show per page
+
+        // Pagination variables
+        let ordersData = [];
+        let inventoryData = [];
+        let currentOrdersPage = 1;
+        let currentInventoryPage = 1;
+
         // Tab functionality
         function openTab(evt, tabName) {
             // Hide all tab content
@@ -338,17 +543,17 @@
             for (let i = 0; i < tabContents.length; i++) {
                 tabContents[i].style.display = "none";
             }
-            
+
             // Remove active class from all tab buttons
             const tabButtons = document.getElementsByClassName("tab-button");
             for (let i = 0; i < tabButtons.length; i++) {
                 tabButtons[i].className = tabButtons[i].className.replace(" active", "");
             }
-            
+
             // Show the current tab and add active class to the button
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
-            
+
             // Refresh content when switching tabs
             if (tabName === "ordersTab") {
                 fetchOrders();
@@ -363,39 +568,144 @@
             fetchInventory();
         };
 
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+
+            // Check if timestamp is already a Date object
+            const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
+
+            // Check if date is valid
+            if (isNaN(date.getTime())) {
+                return 'Invalid Date';
+            }
+
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            return `${day}-${month}-${year} (${hours}:${minutes})`;
+        }
+
+        function renderOrdersPagination() {
+            const totalPages = Math.ceil((ordersData.length - 1) / ITEMS_PER_PAGE);
+            const startIndex = (currentOrdersPage - 1) * ITEMS_PER_PAGE + 1;
+            const endIndex = Math.min(currentOrdersPage * ITEMS_PER_PAGE, ordersData.length - 1);
+
+            // Update page info
+            document.getElementById('ordersPageInfo').textContent =
+                `Showing ${startIndex} to ${endIndex} of ${ordersData.length - 1} entries`;
+
+            // Enable/disable pagination buttons
+            document.getElementById('ordersPrevBtn').disabled = currentOrdersPage === 1;
+            document.getElementById('ordersNextBtn').disabled = currentOrdersPage === totalPages;
+
+            // Render current page of orders
+            const tbody = document.getElementById('ordersBody');
+            const pageData = ordersData.slice(startIndex, endIndex + 1);
+
+            tbody.innerHTML = pageData.map((row, index) => {
+                let statusClass = 'status-new';
+                if (row[11] === 'Processing') {
+                    statusClass = 'status-processing';
+                } else if (row[11] === 'Completed') {
+                    statusClass = 'status-completed';
+                } else if (row[11] === 'Canceled') {
+                    statusClass = 'status-canceled';
+                }
+
+                // Format payment proof
+                let proofContent = 'N/A';
+                if (row[10] && row[10] !== 'No image' && row[10] !== 'Image upload failed') {
+                    proofContent = `<a class="proof-link" onclick="showProof('${row[10]}', '${row[12] || 'No verification details'}')">View Proof</a>`;
+                } else {
+                    proofContent = row[10] || 'N/A';
+                }
+
+                return `
+                <tr>
+                    <td>${formatDate(row[0])}</td>
+                    <td>${row[1] || 'N/A'}</td>
+                    <td>${row[2] || 'N/A'}</td>
+                    <td>${row[3] || 'N/A'}</td>
+                    <td class="text-center">${row[4] || 'N/A'}</td>
+                    <td>${row[5] ? 'RM' + row[5] : 'N/A'}</td>
+                    <td>${row[6] || 'N/A'}</td>
+                    <td>${row[7] || 'N/A'}</td>
+                    <td>${row[8] || 'N/A'}</td>
+                    <td>${row[9] || 'N/A'}</td>
+                    <td>${proofContent}</td>
+                    <td class="text-nowrap text-center"><span class="status-badge ${statusClass}">${row[11] || 'N/A'}</span></td>
+                    <td>
+                        <div class="action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                            ${row[11] !== 'Processing' ? `<button class="action-btn btn-processing" onclick="updateOrderStatus(${startIndex + index}, 'Processing')">Processing</button>` : ''}
+                            ${row[11] !== 'Completed' ? `<button class="action-btn btn-completed" onclick="updateOrderStatus(${startIndex + index}, 'Completed')">Complete</button>` : ''}
+                            ${row[11] !== 'Canceled' ? `<button class="action-btn btn-canceled" onclick="updateOrderStatus(${startIndex + index}, 'Canceled')">Cancel</button>` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+        }
+
+        function renderInventoryPagination() {
+            const totalPages = Math.ceil((inventoryData.length - 1) / ITEMS_PER_PAGE);
+            const startIndex = (currentInventoryPage - 1) * ITEMS_PER_PAGE + 1;
+            const endIndex = Math.min(currentInventoryPage * ITEMS_PER_PAGE, inventoryData.length - 1);
+
+            // Update page info
+            document.getElementById('inventoryPageInfo').textContent =
+                `Showing ${startIndex} to ${endIndex} of ${inventoryData.length - 1} entries`;
+
+            // Enable/disable pagination buttons
+            document.getElementById('inventoryPrevBtn').disabled = currentInventoryPage === 1;
+            document.getElementById('inventoryNextBtn').disabled = currentInventoryPage === totalPages;
+
+            // Render current page of inventory
+            const tbody = document.getElementById('inventoryBody');
+            const pageData = inventoryData.slice(startIndex, endIndex + 1);
+
+            tbody.innerHTML = pageData.map(row => `
+                <tr>
+                    <td>${row[0] || 'N/A'}</td>
+                    <td>${row[1] ? 'RM' + row[1] : 'N/A'}</td>
+                    <td>
+                        <input type="number" class="form-control" value="${row[2] || 0}" id="qty-${row[0]}">
+                    </td>
+                    <td>
+                        <button class="update-btn" onclick="updateStock('${row[0]}')">
+                            <i class="bi bi-check-lg"></i> Update
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function changePage(type, direction) {
+            if (type === 'orders') {
+                currentOrdersPage += direction;
+                renderOrdersPagination();
+            } else if (type === 'inventory') {
+                currentInventoryPage += direction;
+                renderInventoryPagination();
+            }
+        }
+
         async function fetchOrders() {
             try {
                 const url = `${SCRIPT_URL}?type=orders&password=${PASSWORD}`;
                 const response = await fetch(url);
-                const data = await response.json();
-                
-                const tbody = document.getElementById('ordersBody');
-                tbody.innerHTML = data.slice(1).map(row => {
-                    let statusClass = 'status-new';
-                    if (row[9] === 'Processing') {
-                        statusClass = 'status-processing';
-                    } else if (row[9] === 'Completed') {
-                        statusClass = 'status-completed';
-                    } else if (row[9] === 'Canceled') {
-                        statusClass = 'status-canceled';
-                    }
-                    
-                    return `
-                        <tr>
-                            <td>${row[0]}</td>
-                            <td>${row[1]}</td>
-                            <td>${row[2]}</td>
-                            <td>${row[3]}</td>
-                            <td>RM${row[4]}</td>
-                            <td><span class="status-badge ${statusClass}">${row[9]}</span></td>
-                        </tr>
-                    `;
-                }).join('');
-                
-                // Update the orders count badge
-                const newOrders = data.slice(1).filter(row => row[9] === 'New').length;
-                document.getElementById('ordersBadge').textContent = newOrders;
-                
+                ordersData = await response.json();
+
+                // Reset page to 1 when fetching new data
+                currentOrdersPage = 1;
+                renderOrdersPagination();
+
+                // Update the orders count badge based on the number of rows
+                const orderCount = ordersData.length - 1; // Subtracting header row
+                document.getElementById('ordersBadge').textContent = orderCount;
+
                 showAlert('orderAlert');
             } catch (error) {
                 console.error('Error fetching orders:', error);
@@ -406,24 +716,12 @@
             try {
                 const url = `${SCRIPT_URL}?type=items&password=${PASSWORD}`;
                 const response = await fetch(url);
-                const data = await response.json();
-                
-                const tbody = document.getElementById('inventoryBody');
-                tbody.innerHTML = data.slice(1).map(row => `
-                    <tr>
-                        <td>${row[0]}</td>
-                        <td>RM${row[1]}</td>
-                        <td>
-                            <input type="number" class="form-control" value="${row[2]}" id="qty-${row[0]}">
-                        </td>
-                        <td>
-                            <button class="update-btn" onclick="updateStock('${row[0]}')">
-                                <i class="bi bi-check-lg"></i> Update
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                
+                inventoryData = await response.json();
+
+                // Reset page to 1 when fetching new data
+                currentInventoryPage = 1;
+                renderInventoryPagination();
+
                 showAlert('inventoryAlert');
             } catch (error) {
                 console.error('Error fetching inventory:', error);
@@ -433,7 +731,7 @@
         async function updateStock(itemName) {
             try {
                 const newQty = document.getElementById(`qty-${itemName}`).value;
-                
+
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -443,8 +741,8 @@
                         password: PASSWORD
                     })
                 });
-                
-                if(response.ok) {
+
+                if (response.ok) {
                     showAlert('inventoryAlert');
                     fetchInventory();
                 }
@@ -452,15 +750,65 @@
                 console.error('Error updating stock:', error);
             }
         }
-        
+
+        async function updateOrderStatus(rowIndex, newStatus) {
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'updateOrderStatus',
+                        rowIndex: rowIndex - 1,
+                        newStatus: newStatus,
+                        password: PASSWORD
+                    })
+                });
+                if (response.ok) {
+                    showAlert('orderAlert');
+                    fetchOrders();
+                }
+            } catch (error) {
+                console.error('Error updating order status:', error);
+            }
+        }
+
         function showAlert(alertId) {
             const alert = document.getElementById(alertId);
             alert.style.display = 'block';
-            
+
             setTimeout(() => {
                 alert.style.display = 'none';
             }, 3000);
         }
+
+        // Modal functions for payment proof
+        function showProof(imageUrl, verificationText) {
+            const modal = document.getElementById('proofModal');
+            const img = document.getElementById('proofImage');
+            const text = document.getElementById('proofText');
+
+            if (imageUrl && imageUrl.startsWith('http')) {
+                img.src = imageUrl;
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+
+            text.textContent = verificationText || 'No verification details available';
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('proofModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside the content
+        window.onclick = function (event) {
+            const modal = document.getElementById('proofModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
     </script>
 </body>
+
 </html>
