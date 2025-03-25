@@ -2,6 +2,8 @@
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJmbbBneotJqvt8gcuSmW91Ry2VhvxY4DU9OnwDWl1r03Lw_SxgJOyGnA_OE4XcfE/exec';
 
+var totalPrice = 0;
+
 document.getElementById('orderForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -36,7 +38,7 @@ try {
         phoneNumber: document.getElementById('phoneNumber').value,
         item: document.getElementById('productName').value,
         quantity: document.getElementById('quantity').value,
-        total: calculateTotal(),
+        total: totalPrice,
         cook: document.querySelector('input[name="cook"]:checked').value,
         deliveryType: document.querySelector('input[name="delivery"]:checked').value,
         paymentType: document.querySelector('input[name="payment"]:checked').value,
@@ -152,14 +154,17 @@ function changeImage(imageSrc) {
             document.getElementById('smallimage').src = image;
         }
     });
+
     //quantity 
     const pricePerItem = price;
+    
 
     function updateBuyButton() {
         var quantity = document.getElementById('quantity').value;
         var cookType = document.querySelector('input[name="cook"]:checked').value;
         var deliveryType = document.querySelector('input[name="delivery"]:checked').value;
         message.innerHTML = document.getElementById('phoneNumber').value;
+        
         var additionalCost = 0;
         if (cookType === 'cook') {
             additionalCost += 0.5;
@@ -168,7 +173,7 @@ function changeImage(imageSrc) {
             additionalCost += 1;
         }
 
-        var totalPrice = (parseFloat(pricePerItem) + additionalCost) * quantity;
+        totalPrice = (parseFloat(pricePerItem) + additionalCost) * quantity;
         var buyButton = document.getElementById('buyButton');
         buyButton.innerHTML = `Beli - RM${totalPrice.toFixed(2)}`;
     }

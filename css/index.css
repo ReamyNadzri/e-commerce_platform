@@ -222,3 +222,40 @@ a {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
 }
+
+.header-main {
+    background: linear-gradient(135deg, #ff8a00 0%, #ff4e50 100%);
+    font-family: 'Poppins', sans-serif;
+    padding: 1rem 0;
+}
+.navbar {
+    background: transparent !important;
+}
+.navbar-brand {
+    color: white !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.typing-text {
+    border-right: 2px solid #fff;
+    padding-right: 5px;
+    animation: blink 0.75s step-end infinite;
+    color: white;
+}
+.shopping-icon {
+    color: white;
+    font-size: 1.8rem;
+    margin-right: 0.8rem;
+}
+@keyframes blink {
+    from, to { border-color: transparent }
+    50% { border-color: #fff; }
+}
+.navbar-nav .nav-link {
+    color: white !important;
+    margin: 0 1rem;
+    transition: all 0.3s ease;
+}
+.navbar-nav .nav-link:hover {
+    transform: translateY(-2px);
+}
