@@ -1,6 +1,6 @@
 
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdwec5DTPNXahcNB85wY30rbsAXPgX5oVWwpx9-Z1plzgg45wjBpGxnXWON30pTlSo/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJmbbBneotJqvt8gcuSmW91Ry2VhvxY4DU9OnwDWl1r03Lw_SxgJOyGnA_OE4XcfE/exec';
 
 document.getElementById('orderForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -132,7 +132,7 @@ function changeImage(imageSrc) {
         imageSrc = image
     }
             document.getElementById('productImage').src = imageSrc;
-        }
+}
 
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -141,11 +141,6 @@ function changeImage(imageSrc) {
     const image = urlParams.get('image');
     const weight = urlParams.get('weight');
     
-    if (item.toLowerCase().includes('nasi segera') && weight === '90g') {
-        price = 3.50;
-    } else if (item.toLowerCase().includes('bubur') && weight === '40g') {
-        price = 2.50;
-    }
 
     document.addEventListener('DOMContentLoaded', () => {
         if (item && price) {
@@ -169,7 +164,7 @@ function changeImage(imageSrc) {
         if (cookType === 'cook') {
             additionalCost += 0.5;
         }
-        if (deliveryType === 'delivery_sutera') {
+        if (deliveryType === 'delivery') {
             additionalCost += 1;
         }
 
