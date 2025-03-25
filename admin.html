@@ -17,12 +17,6 @@
             font-family: 'Arial', sans-serif;
         }
 
-        body {
-            background-color: #f7f7f7;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
         .main-container {
             background-color: white;
             border-radius: 15px;
@@ -79,17 +73,16 @@
         }
 
         /* Consistent button sizing */
-        .action-btn {
+        /* .action-btn {
             padding: 6px 10px;
             border-radius: 5px;
             border: none;
             cursor: pointer;
             font-size: 0.8rem;
             min-width: 80px;
-            /* Ensures consistent width */
             text-align: center;
             transition: all 0.2s ease;
-        }
+        } */
 
         /* Hover effects for buttons */
         .btn-processing:hover {
@@ -399,7 +392,7 @@
 </head>
 
 <body>
-    <div class="container mt-2">
+    <div class="container-fluid mt-3">
         <div class="app-header">
             <div class="logo">
                 <i class="bi bi-bootstrap-fill"></i>
@@ -438,19 +431,19 @@
                         <table id="ordersTable" class="table">
                             <thead>
                                 <tr>
-                                    <th>Timestamp</th>
-                                    <th>Customer Name</th>
-                                    <th>Customer Phone</th>
+                                    <th>Time</th>
+                                    <th class="text-truncate col-1">Name</th>
+                                    <th>Phone</th>
                                     <th>Item</th>
                                     <th>Quantity</th>
                                     <th>Total (RM)</th>
                                     <th>Cooked</th>
                                     <th>Delivery Type</th>
                                     <th>Payment Type</th>
-                                    <th>Room Number</th>
-                                    <th>Payment Proof</th>
+                                    <th>Room</th>
+                                    <th>Payment</th>
                                     <th class="text-center">Status</th>
-                                    <th>Actions</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="ordersBody"></tbody>
@@ -626,22 +619,22 @@
                 return `
                 <tr>
                     <td>${formatDate(row[0])}</td>
-                    <td>${row[1] || 'N/A'}</td>
+                    <td class="text-nowrap">${row[1] || 'N/A'}</td>
                     <td>${row[2] || 'N/A'}</td>
                     <td>${row[3] || 'N/A'}</td>
                     <td class="text-center">${row[4] || 'N/A'}</td>
-                    <td>${row[5] ? 'RM' + row[5] : 'N/A'}</td>
+                    <td>${row[5] ? 'RM' + parseFloat(row[5]).toFixed(2) : 'N/A'}</td>
                     <td>${row[6] || 'N/A'}</td>
                     <td>${row[7] || 'N/A'}</td>
                     <td>${row[8] || 'N/A'}</td>
                     <td>${row[9] || 'N/A'}</td>
                     <td>${proofContent}</td>
                     <td class="text-nowrap text-center"><span class="status-badge ${statusClass}">${row[11] || 'N/A'}</span></td>
-                    <td>
-                        <div class="action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
-                            ${row[11] !== 'Processing' ? `<button class="action-btn btn-processing" onclick="updateOrderStatus(${startIndex + index}, 'Processing')">Processing</button>` : ''}
-                            ${row[11] !== 'Completed' ? `<button class="action-btn btn-completed" onclick="updateOrderStatus(${startIndex + index}, 'Completed')">Complete</button>` : ''}
-                            ${row[11] !== 'Canceled' ? `<button class="action-btn btn-canceled" onclick="updateOrderStatus(${startIndex + index}, 'Canceled')">Cancel</button>` : ''}
+                    <td class="align-middle">
+                        <div class="d-flex gap-2 justify-content-center align-items-center flex-wrap">
+                            ${row[11] !== 'Processing' ? `<button class="action-btn btn-processing" onclick="updateOrderStatus(${startIndex + index}, 'Processing')"><i class="bi bi-clock"></i></button>` : ''}
+                            ${row[11] !== 'Completed' ? `<button class="action-btn btn-completed" onclick="completeOrder(${startIndex + index}, '${row[2] || ''}', '${row[1] || ''}', '${row[3] || ''}')"><i class="bi bi-check2-all"></i></button>` : ''}
+                            ${row[11] !== 'Canceled' ? `<button class="action-btn btn-canceled" onclick="updateOrderStatus(${startIndex + index}, 'Canceled')"><i class="bi bi-x"></i></button>` : ''}
                         </div>
                     </td>
                 </tr>
@@ -786,19 +779,65 @@
             const img = document.getElementById('proofImage');
             const text = document.getElementById('proofText');
 
-            if (imageUrl && imageUrl.startsWith('http')) {
-                img.src = imageUrl;
-                img.style.display = 'block';
-            } else {
-                img.style.display = 'none';
+            // Reset modal content
+            img.style.display = 'none';
+            img.src = '';
+            text.textContent = verificationText || 'No verification details available';
+
+            if (!imageUrl || imageUrl === 'No image' || imageUrl === 'Image upload failed') {
+                modal.style.display = 'block';
+                return;
             }
 
-            text.textContent = verificationText || 'No verification details available';
+            // Handle Google Drive links differently
+            if (imageUrl.includes('drive.google.com')) {
+                const fileIdMatch = imageUrl.match(/[-\w]{25,}/);
+
+                if (fileIdMatch) {
+                    const fileId = fileIdMatch[0];
+                    // Use Google Drive's embeddable viewer
+                    const iframe = document.createElement('iframe');
+                    iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                    iframe.style.width = '100%';
+                    iframe.style.height = '500px';
+                    iframe.style.border = 'none';
+
+                    // Clear previous content and add iframe
+                    const proofContent = document.getElementById('proofContent');
+                    proofContent.innerHTML = '';
+                    proofContent.appendChild(iframe);
+
+                    // Add direct link as fallback
+                    const directLink = document.createElement('a');
+                    directLink.href = imageUrl;
+                    directLink.target = '_blank';
+                    directLink.textContent = 'Open in Google Drive';
+                    directLink.style.display = 'block';
+                    directLink.style.marginTop = '10px';
+                    proofContent.appendChild(directLink);
+
+                    modal.style.display = 'block';
+                    return;
+                }
+            }
+
+            // Regular image handling for non-Google Drive URLs
+            if (imageUrl.startsWith('http')) {
+                img.src = imageUrl;
+                img.style.display = 'block';
+                img.onerror = () => {
+                    img.style.display = 'none';
+                    text.innerHTML = `Unable to load image. <a href="${imageUrl}" target="_blank">Click here to view directly</a><br>${verificationText || ''}`;
+                };
+            }
+
             modal.style.display = 'block';
         }
 
+
         function closeModal() {
             document.getElementById('proofModal').style.display = 'none';
+            window.location.replace("admin.html");
         }
 
         // Close modal when clicking outside the content
@@ -807,6 +846,65 @@
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
+        }
+
+        //whatsapp on complete action
+        async function completeOrder(rowIndex, phoneNumber, customerName, orderDetails) {
+            try {
+                // First update the order status to "Completed"
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'updateOrderStatus',
+                        rowIndex: rowIndex,
+                        newStatus: 'Completed',
+                        password: PASSWORD
+                    })
+                });
+
+                if (response.ok) {
+                    showAlert('orderAlert');
+                    fetchOrders();
+
+                    // Send WhatsApp message if phone number exists
+                    if (phoneNumber) {
+                        const cleanNumber = formatPhoneNumber(phoneNumber);
+                        if (cleanNumber) {
+                            const presetMessage = `Hi ${customerName || 'there'}! Your order has been completed:\n\n` +
+                                `Order Details: ${orderDetails || 'N/A'}\n\n` +
+                                `Thank you for your purchase!`;
+
+                            const encodedMessage = encodeURIComponent(presetMessage);
+                            const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+                            window.open(whatsappUrl, '_blank');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error completing order:', error);
+            }
+        }
+
+        // Helper function to format phone numbers (Malaysia specific)
+        function formatPhoneNumber(phoneNumber) {
+            if (!phoneNumber) return null;
+
+            // Remove all non-digit characters
+            let cleanNumber = phoneNumber.replace(/\D/g, '');
+
+            // Malaysia number formatting
+            if (cleanNumber.startsWith('0')) {
+                cleanNumber = '60' + cleanNumber.substring(1);
+            } else if (!cleanNumber.startsWith('60')) {
+                cleanNumber = '60' + cleanNumber;
+            }
+
+            // Validate the number (Malaysian numbers are typically 10-11 digits with country code)
+            if (cleanNumber.length >= 10 && cleanNumber.length <= 12) {
+                return cleanNumber;
+            }
+
+            return null;
         }
     </script>
 </body>
