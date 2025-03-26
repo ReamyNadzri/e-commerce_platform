@@ -388,10 +388,75 @@
             background-color: #e74c3c;
             color: white;
         }
+
+        /* loaders */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .loader-container[style*="display: none"] {
+            display: flex !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* .loader-content {
+            text-align: center;
+            background-color: transparent;
+            padding: 20px;
+        } */
+
+        .loader-text {
+            margin-top: 20px;
+            font-weight: 500;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        /* .loader-text {
+            margin-top: 15px;
+            font-weight: 500;
+            color: #e74c3c;
+            text-shadow: 0 0 3px white;
+        } */
     </style>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/quantum.js"></script>
 </head>
 
 <body>
+    <!-- loaders -->
+    <div class="loader-container" id="loader">
+        <div class="loader-content">
+            <l-quantum size="75" speed="1.2" color="#555" id="loaderAnimation"></l-quantum>
+            <div class="loader-text" id="loaderText">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Main body -->
     <div class="container-fluid mt-3">
         <div class="app-header">
             <div class="logo">
@@ -686,6 +751,7 @@
         }
 
         async function fetchOrders() {
+            showLoader('Fetching orders...');
             try {
                 const url = `${SCRIPT_URL}?type=orders&password=${PASSWORD}`;
                 const response = await fetch(url);
@@ -695,6 +761,9 @@
                 currentOrdersPage = 1;
                 renderOrdersPagination();
 
+                // Force UI update before hiding loader
+                await new Promise(resolve => requestAnimationFrame(resolve));
+
                 // Update the orders count badge based on the number of rows
                 const orderCount = ordersData.length - 1; // Subtracting header row
                 document.getElementById('ordersBadge').textContent = orderCount;
@@ -702,10 +771,13 @@
                 showAlert('orderAlert');
             } catch (error) {
                 console.error('Error fetching orders:', error);
+            } finally {
+                hideLoader();
             }
         }
 
         async function fetchInventory() {
+            showLoader('Fetching inventory...');
             try {
                 const url = `${SCRIPT_URL}?type=items&password=${PASSWORD}`;
                 const response = await fetch(url);
@@ -715,13 +787,19 @@
                 currentInventoryPage = 1;
                 renderInventoryPagination();
 
+                // Force UI update before hiding loader
+                await new Promise(resolve => requestAnimationFrame(resolve));
+
                 showAlert('inventoryAlert');
             } catch (error) {
                 console.error('Error fetching inventory:', error);
+            } finally {
+                hideLoader();
             }
         }
 
         async function updateStock(itemName) {
+            showLoader('Updating stock...');
             try {
                 const newQty = document.getElementById(`qty-${itemName}`).value;
 
@@ -741,10 +819,13 @@
                 }
             } catch (error) {
                 console.error('Error updating stock:', error);
+            } finally {
+                hideLoader();
             }
         }
 
         async function updateOrderStatus(rowIndex, newStatus) {
+            showLoader('Updating order status...');
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -756,11 +837,20 @@
                     })
                 });
                 if (response.ok) {
+                    // Wait for both network and DOM updates
+                    await Promise.all([
+                        response.json(),
+                        new Promise(resolve => {
+                            fetchOrders().then(resolve);
+                            requestAnimationFrame(resolve);
+                        })
+                    ]);
                     showAlert('orderAlert');
-                    fetchOrders();
                 }
             } catch (error) {
                 console.error('Error updating order status:', error);
+            } finally {
+                hideLoader();
             }
         }
 
@@ -850,6 +940,7 @@
 
         //whatsapp on complete action
         async function completeOrder(rowIndex, phoneNumber, customerName, orderDetails) {
+            showLoader('Completing order...');
             try {
                 // First update the order status to "Completed"
                 const response = await fetch(SCRIPT_URL, {
@@ -882,6 +973,8 @@
                 }
             } catch (error) {
                 console.error('Error completing order:', error);
+            } finally {
+                hideLoader();
             }
         }
 
@@ -905,6 +998,26 @@
             }
 
             return null;
+        }
+
+        // Loader functions
+        function showLoader(text = 'Loading...') {
+            const loader = document.getElementById('loader');
+            const loaderText = document.getElementById('loaderText');
+
+            // Force reflow to ensure loader is visible before operations start
+            void loader.offsetHeight;
+
+            loaderText.textContent = text;
+            loader.style.display = 'flex';
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            // Add slight delay to ensure UI updates are complete
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 2000);
         }
     </script>
 </body>
