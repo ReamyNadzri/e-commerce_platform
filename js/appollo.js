@@ -1,4 +1,4 @@
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGSVsWSRfwa3gQaCBx8VpfE_ep8OwIQCnxcajALtrVGkEPgTWnSgEz5Kxt47pnegaD/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHJsXSQSvCORpjRZesi-B6BOF0Cf-1m06a5KT-XTYIOlCW3olGIRZI-Rq18AE1R3Pg/exec';
         const PASSWORD = '110119';
         const ITEMS_PER_PAGE = 10; // Number of items to show per page
 
@@ -111,7 +111,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGSVsWSRfwa3gQaCBx8
                     <td class="text-nowrap text-center"><span class="status-badge ${statusClass}">${row[11] || 'N/A'}</span></td>
                     <td class="align-middle">
                         <div class="d-flex gap-2 justify-content-center align-items-center flex-wrap">
-                            ${row[11] !== 'Processing' ? `<button class="action-btn btn-processing" onclick="updateOrderStatus(${startIndex + index}, 'Processing')"><i class="bi bi-clock"></i></button>` : ''}
+                            ${row[11] !== 'Processing' ? `<button class="action-btn btn-processing" onclick="pendingOrder(${startIndex + index}, '${row[2] || ''}', '${row[1] || ''}', '${row[3] || ''}')"><i class="bi bi-clock"></i></button>` : ''}
                             ${row[11] !== 'Completed' ? `<button class="action-btn btn-completed" onclick="completeOrder(${startIndex + index}, '${row[2] || ''}', '${row[1] || ''}', '${row[3] || ''}')"><i class="bi bi-check2-all"></i></button>` : ''}
                             ${row[11] !== 'Canceled' ? `<button class="action-btn btn-canceled" onclick="cancelOrder(${startIndex + index}, '${row[2] || ''}', '${row[1] || ''}', '${row[3] || ''}')"><i class="bi bi-x"></i></button>` : ''}
                         </div>
@@ -417,6 +417,47 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGSVsWSRfwa3gQaCBx8
                             const presetMessage = `Sorry ${customerName || 'there'}! Your order has been canceled due to: insertreasonhere.\n\n` +
                                 `Order Details: ${orderDetails || 'N/A'}\n\n` +
                                 `We sincerely apologize for this inconvenience.\nYou may reclaim a full refund automatically via the phone number linked to DuitNow or by sending a QR Code!\n\nIf you have any questions, please message us here.`;
+
+                            const encodedMessage = encodeURIComponent(presetMessage);
+                            const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+                            window.open(whatsappUrl, '_blank');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error completing order:', error);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        //whatsapp on cancel action
+        async function pendingOrder(rowIndex, phoneNumber, customerName, orderDetails) {
+            showLoader('Waiting to Pickup...');
+            try {
+                // First update the order status to "Completed"
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'updateOrderStatus',
+                        rowIndex: rowIndex,
+                        newStatus: 'Pending',
+                        password: PASSWORD
+                    })
+                });
+
+                if (response.ok) {
+                    showAlert('orderAlert');
+                    fetchOrders();
+
+                    // Send WhatsApp message if phone number exists
+                    if (phoneNumber) {
+                        const cleanNumber = formatPhoneNumber(phoneNumber);
+                        if (cleanNumber) {
+                            const presetMessage = `Hi ${customerName || 'there'}! Your order is ready for pickup:\n\n` +
+                                `Order Details: ${orderDetails || 'N/A'}\n\n` +
+                                `You can collect it at Room KASA204 or in front of the Kolej Office if you are a SUTERA student.\n\n` +
+                                `Thank you for your purchase! If you have any questions, please message us here.`;
 
                             const encodedMessage = encodeURIComponent(presetMessage);
                             const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;

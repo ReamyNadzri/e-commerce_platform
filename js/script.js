@@ -1,6 +1,6 @@
 
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGSVsWSRfwa3gQaCBx8VpfE_ep8OwIQCnxcajALtrVGkEPgTWnSgEz5Kxt47pnegaD/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHJsXSQSvCORpjRZesi-B6BOF0Cf-1m06a5KT-XTYIOlCW3olGIRZI-Rq18AE1R3Pg/exec';
 
 var totalPrice = 0;
 
@@ -11,6 +11,8 @@ document.getElementById('orderForm').addEventListener('submit', async (e) => {
     const originalButtonText = buyButton.innerText;
     buyButton.innerText = 'Please wait...';
     buyButton.disabled = true;
+    buyButton.style.backgroundColor = 'lightslategray';
+    buyButton.style.cursor = 'not-allowed';
 
     const roomNumber = document.getElementById('roomNumber').value;
     const fileInput = document.getElementById('paymentProof');
