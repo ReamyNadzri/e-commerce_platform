@@ -259,3 +259,49 @@ a {
 .navbar-nav .nav-link:hover {
     transform: translateY(-2px);
 }
+.discount-badge {
+    position: absolute;
+    top: 250px;
+    right: 10px;
+    background-color: #e74c3c;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transform: rotate(5deg);
+  }
+  .original-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #25D366; /* WhatsApp green color */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.1);
+}
+
+.whatsapp-icon {
+    width: 35px;
+    height: 35px;
+    fill: white;
+}
+  

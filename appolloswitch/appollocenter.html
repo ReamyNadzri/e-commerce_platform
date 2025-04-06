@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/w3-css/4.1.0/w3.min.css">
+    <link rel="stylesheet" href="../css/appollo.css" />
+    
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/quantum.js"></script>
+
+</head>
+
+<body>
+    <!-- loaders -->
+    <div class="loader-container" id="loader">
+        <div class="loader-content">
+            <l-quantum size="75" speed="1.2" color="#555" id="loaderAnimation"></l-quantum>
+            <div class="loader-text" id="loaderText">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Main body -->
+    <div class="container-fluid mt-3">
+        <div class="app-header">
+            <div class="logo">
+                <i class="bi bi-bootstrap-fill"></i>
+            </div>
+            <div>
+                <h1 class="app-title">Admin Dashboard</h1>
+                <p class="text-muted mb-0">Manage orders and inventory</p>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="section-title">
+                <h2><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
+            </div>
+
+            <div class="details-section">
+                <div class="tab-container">
+                    <button class="tab-button active" onclick="openTab(event, 'ordersTab')">
+                        <i class="bi bi-cart3"></i> Orders <span class="badge-container" id="ordersBadge">0</span>
+                    </button>
+                    <button class="tab-button" onclick="openTab(event, 'inventoryTab')">
+                        <i class="bi bi-box-seam"></i> Inventory
+                    </button>
+                </div>
+
+                <!-- Orders Tab Content -->
+                <div id="ordersTab" class="tab-content" style="display: block;">
+                    <div class="header-container">
+                        <h3 class="mb-0"><i class="bi bi-cart3"></i> Current Orders</h3>
+                        <button class="refresh-btn" onclick="fetchOrders()">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="ordersTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th class="text-truncate col-1">Name</th>
+                                    <th>Phone</th>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Total (RM)</th>
+                                    <th>Cooked</th>
+                                    <th>Delivery Type</th>
+                                    <th>Payment Type</th>
+                                    <th>Room</th>
+                                    <th>Payment</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-container" id="ordersPagination">
+                        <div class="page-info" id="ordersPageInfo">Showing 0 to 0 of 0 entries</div>
+                        <div class="pagination-buttons">
+                            <button class="pagination-btn" onclick="changePage('orders', -1)" id="ordersPrevBtn"><i
+                                    class="bi bi-arrow-left-short"></i></button>
+                            <button class="pagination-btn" onclick="changePage('orders', 1)" id="ordersNextBtn"><i
+                                    class="bi bi-arrow-right-short"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="w3-panel w3-pale-green w3-leftbar w3-border-green alert" id="orderAlert">
+                        <p>Orders refreshed successfully!</p>
+                    </div>
+                </div>
+
+                <!-- Inventory Tab Content -->
+                <div id="inventoryTab" class="tab-content">
+                    <div class="header-container">
+                        <h3 class="mb-0"><i class="bi bi-box-seam"></i> Stock Items</h3>
+                        <button class="refresh-btn" onclick="fetchInventory()">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="inventoryTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-container" id="inventoryPagination">
+                        <div class="page-info" id="inventoryPageInfo">Showing 0 to 0 of 0 entries</div>
+                        <div class="pagination-buttons">
+                            <button class="pagination-btn" onclick="changePage('inventory', -1)"
+                                id="inventoryPrevBtn"><i class="bi bi-arrow-left-short"></i></button>
+                            <button class="pagination-btn" onclick="changePage('inventory', 1)" id="inventoryNextBtn"><i
+                                    class="bi bi-arrow-right-short"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="w3-panel w3-pale-green w3-leftbar w3-border-green alert" id="inventoryAlert">
+                        <p>Inventory updated successfully!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Proof Modal -->
+    <div id="proofModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Payment Proof</h3>
+            <div id="proofContent">
+                <img id="proofImage" class="proof-image" src="" alt="Payment Proof">
+                <div id="proofText"></div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/appollo.js"></script>
+</body>
+
+</html>

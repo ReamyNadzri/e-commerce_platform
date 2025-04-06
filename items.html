@@ -79,6 +79,12 @@
                             <img src="sources/nutrisinasilemak.webp" class="img-thumbnail" width="130" onclick="changeImage('sources/nutrisinasilemak.webp')" alt="Image 2">
                         </div>
                         <div class="col">
+                            <img src="sources/nutrisinasiasam.webp" class="img-thumbnail" width="130" onclick="changeImage('sources/nutrisinasiasam.webp')" alt="Image 2">
+                        </div>
+                        <div class="col">
+                            <img src="sources/nutrisinasikari.webp" class="img-thumbnail" width="130" onclick="changeImage('sources/nutrisinasikari.webp')" alt="Image 2">
+                        </div>
+                        <div class="col">
                             <img src="sources/caramemasak.webp" class="img-thumbnail" width="130" onclick="changeImage('sources/caramemasak.webp')" alt="Image 3">
                         </div>
                     </div>
@@ -195,18 +201,29 @@
                                         <label class="form-check-label" for="eWalletDuitNow"> Duit Now QR</label>
                                     </div>
                                     <div id="qrCodeContainer" class="mt-3" style="display: none;">
-                                        <img id="qrCodeImage" src="" alt="QR Code" style="width:200px; cursor: pointer;" onclick="enlargeImage(this)">
+                                        <img id="qrCodeImage" src="" alt="QR Code" style="width:200px; cursor: pointer;" onclick="enlargeImage(this)"><hr>
+
+                                        <a href="https://payment.tngdigital.com.my/sc/bDLn8K4vWL" class="tng-button">
+                                            <div class="tng-logo">
+                                                <img src="sources/tng.png" alt="Touch 'n Go eWallet Logo" style="width: 35px;">
+                                            </div>
+                                            <span class="tng-text">Pay with Touch 'n Go eWallet</span>
+                                        </a>
+
                                     </div>
                                     <input type="file" class="form-control mt-2" id="paymentProof" accept="image/*" required>
                                     <small class="text-muted">Upload the receipt here after making the payment</small>
 
                                     <script>
+                                        
+
+
                                         function togglePaymentOptions() {
                                             const eWalletOptions = document.getElementById('eWalletOptions');
                                             const paymentProof = document.getElementById('paymentProof');
                                             if (document.getElementById('paymentEWallet').checked) {
                                                 eWalletOptions.style.display = 'block';
-                                                paymentProof.required = true;
+                                                paymentProof.required = true;                                          
                                             } else {
                                                 eWalletOptions.style.display = 'none';
                                                 paymentProof.required = false;
@@ -246,6 +263,7 @@
                                         }
 
                                         // Initialize on page load
+                                        alert('Please upload the payment proof after making the online payment.');
                                         togglePaymentOptions();
                                     </script>
                                 </div>

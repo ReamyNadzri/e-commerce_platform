@@ -1,4 +1,4 @@
-const texts = ["AF Shopping", "Best Deals", "Shop Now"];
+const texts = ["AF Shopping", "One Stop Center", "Shop Now"];
         const brandText = document.getElementById('brand-text');
         let textIndex = 0;
         let charIndex = 0;

@@ -1,6 +1,6 @@
 
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJmbbBneotJqvt8gcuSmW91Ry2VhvxY4DU9OnwDWl1r03Lw_SxgJOyGnA_OE4XcfE/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGSVsWSRfwa3gQaCBx8VpfE_ep8OwIQCnxcajALtrVGkEPgTWnSgEz5Kxt47pnegaD/exec';
 
 var totalPrice = 0;
 
