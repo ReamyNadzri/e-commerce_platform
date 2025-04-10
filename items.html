@@ -149,9 +149,9 @@
                             <hr>
                             
                             <p>Pilih Penghantaran <i class="bi bi-info-circle text-primary" 
-                               data-bs-toggle="tooltip" 
-                               data-bs-placement="right"
-                               title="Pickup Standard: K204 | Pickup Sutera: Depan Pejabat Kolej"></i></p>
+                                data-bs-toggle="popover" 
+                                data-bs-trigger="hover focus" 
+                                data-bs-content="Pickup Standard: K204 | Pickup Sutera: Depan Pejabat Kolej"></i></p>
                             <div class="row mb-3 w3-margin-left">
                                 <div class="col-md-6 form-check">
                                     <input class="form-check-input" type="radio" name="delivery" id="pickupStandard" value="pickup" onclick="updateBuyButton(); toggleRoomNumber()" checked>
@@ -183,8 +183,23 @@
                             <div class="row mb-3 w3-margin-left">
                                 <div class="col-md-6 form-check">
                                     <input class="form-check-input" type="radio" name="payment" id="paymentCash" value="cash" onclick="togglePaymentOptions()" disabled>
-                                    <label class="form-check-label" for="paymentCash"> Cash</label>
+                                    <label class="form-check-label" for="paymentCash"> Cash 
+                                        <i class="bi bi-info-circle text-primary" 
+                                           data-bs-toggle="popover" 
+                                           data-bs-trigger="hover focus" 
+                                           data-bs-content="Cash payment is currently unavailable."></i>
+                                    </label>
                                 </div>
+
+                                <script>
+                                    // Initialize Bootstrap popovers
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+                                        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                                            return new bootstrap.Popover(popoverTriggerEl);
+                                        });
+                                    });
+                                </script>
                                 <div class="col-md-6 form-check">
                                     <input class="form-check-input" type="radio" name="payment" id="paymentEWallet" value="e_wallet" onclick="togglePaymentOptions()" checked>
                                     <label class="form-check-label" for="paymentEWallet"> E-Wallet</label>

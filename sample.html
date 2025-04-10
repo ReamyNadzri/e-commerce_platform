@@ -1,0 +1,55 @@
+Here's a simple example of how to create a tooltip using HTML and a bit of CSS:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tooltip Example</title>
+  <style>
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* Adjust position */
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <p>
+    Hover over the word 
+    <span class="tooltip">tooltip
+      <span class="tooltiptext">This is a tooltip!</span>
+    </span>
+    to see more information.
+  </p>
+</body>
+</html>
+
+
+How It Works:
+- HTML Structure: The tooltip class wraps the element you want the tooltip for. Inside it, there's a hidden tooltiptext element containing the text you want to display.
+- CSS Styling: The tooltip is styled to appear above the element when you hover over it, with smooth transitions and proper positioning.
+- Interactivity: The :hover pseudo-class makes the tooltip visible on hover.
+
+Let me know if you'd like assistance with customizing this!
