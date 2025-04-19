@@ -30,6 +30,42 @@
             <div class="col-md-5 d-flex flex-column">
                 <div class="w3-margin w3-padding w3-round-xlarge bg-white shadow-sm">
                     <h2 class="text-primary">Payment Details</h2>
+<style>
+                    :root {
+                        /* Light theme (default) */
+                        --background-color: #ffffff;
+                        --text-color: #333333;
+                        --heading-color: #222222;
+                        --link-color: #0066cc;
+                      }
+                      
+                      [data-theme="dark"] {
+                        /* Dark theme */
+                        --background-color: #222222;
+                        --text-color: #f0f0f0;
+                        --heading-color: #ffffff;
+                        --link-color: #6699ff;
+                      }
+                      
+                      /* Apply these variables to your elements */
+                      body {
+                        background-color: var(--background-color);
+                        color: var(--text-color);
+                        transition: all 0.3s ease;
+                      }
+                      
+                      h1, h2, h3, h4, h5, h6 {
+                        color: var(--heading-color);
+                      }
+                      
+                      a {
+                        color: var(--link-color);
+                      }</style>
+
+                    <button id="theme-toggle">
+                        Toggle Dark Mode
+                      </button>
+                      <script src="js/dark.js"></script>
                 </div>
             </div><span class="col-md-7"></span>
             <div class="col-md-5 d-flex flex-column align-items-center">
